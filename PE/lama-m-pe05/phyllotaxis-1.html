@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>Sine Start</title>
+	<style>
+		body {
+			background-color: rgb(40,40,40);
+		}
+
+		#container {
+			font-family: Arial, Helvetica, sans-serif;
+			color: rgb(200,200,200);
+			background-color: rgb(70,70,70);
+			display: block;
+			max-width: 1000px;
+			width:80vw;
+			height:100vw;
+			margin: 0 auto;
+			padding: 20px;
+		}
+
+		canvas { 
+			border: 1px solid black;
+			display: block;
+			margin: 0 auto;
+			margin-bottom: 10px;
+		}
+
+		#inputs {
+			width: 640px;
+			margin: 0 auto;
+			display: flex;
+			justify-content: space-evenly;
+		}
+
+		#text {
+			padding: 50px;
+			line-height: 20px;
+		}
+
+	</style>
+	<script>
+	"use strict";
+	const canvasWidth = 640, canvasHeight = 480;
+	let ctx;
+	let n = 0;
+	let rad = 4;
+	const defaultDivergence = 137.5;
+	let divergence = defaultDivergence;
+	const c = 4;
+	const fps = 60;
+	
+	let ramp = true;
+	let oscillate = true;
+
+	function init(){
+		ctx = canvas.getContext("2d");
+		canvas.width = canvasWidth;
+		canvas.height = canvasHeight;
+		ctx.fillRect(0,0,canvasWidth,canvasHeight);
+
+		ramp = document.querySelector("#ramp").checked;
+		document.querySelector("#restart").onclick = reset;
+
+		loop();
+	}
+	
+	function reset() {
+		ctx.save();
+		ctx.fillStyle = "black";
+		ctx.fillRect(0,0,canvasWidth,canvasHeight)
+		ctx.restore();
+		divergence = defaultDivergence;
+		n = 0;
+	}
+
+	function loop() {
+		ctx.save();
+		ctx.fillStyle = "black"
+		ctx.globalAlpha = 0.1
+		ctx.fillRect(0,0,canvasWidth,canvasHeight);
+		ctx.restore();
+
+		setTimeout(loop,1000/fps);
+		let a = n * dtr(divergence);
+		let r = c * Math.sqrt(n);
+		// console.log(a, r);
+		let x = r * Math.cos(a) + canvasWidth/2;
+		let y = r * Math.sin(a) + canvasHeight/2;
+		// console.log(x,y)
+
+		//		---COLORS---
+		// let color = `rgb(${n % 256},0,255)`;
+		//
+		// let aDegrees = (n * divergence) % 256;
+		// let color = `rgb(${aDegrees},0,255)`;
+		//
+		let aDegrees = (n * divergence) % 361;
+		let color = `hsl(${aDegrees},100%,50%)`;
+		// 
+		// let color = `hsl(${n/5 % 361},100%,50%)`;
+
+		if(document.querySelector("#ramp").checked) divergence += 0.05;
+
+		drawCircle(ctx,x,y,rad,color);
+
+		if(oscillate) n++
+			else n--;
+		if(n > 800) oscillate = false;
+		if(n < 0) oscillate = true;
+	}
+
+	// helpers
+	function dtr(degrees){
+		return degrees * (Math.PI/180);
+	}
+
+	function drawCircle(ctx,x,y,radius,color){
+		ctx.save();
+		ctx.fillStyle = color;
+		ctx.beginPath();
+		ctx.arc(x,y,radius,0,Math.PI * 2);
+		ctx.closePath();
+		ctx.fill();
+		ctx.restore();
+	}
+
+	window.onload = init;
+
+	</script>
+</head>
+<body>
+	<div id="container">
+		<canvas id="canvas"></canvas>
+		<div id="inputs">
+			<button id="restart">Restart</button>
+			<div>
+				<input type="checkbox" name="ramp" id="ramp" checked="true">
+				<label for="ramp">Ramp</label>
+			</div>
+		</div>
+		<div id="text">
+			<h1>About this program</h1>
+			<ul>
+				<li>The ramp button determines if the divergence angle will ramp up by 0.05 as it progresses</li>
+				<li>The restart button clears the screen, sets n to 0, and resets divergence value to 137.5</li>
+				<li>Changes made to starter code:</li>
+				<ul>
+					<li>Dots fade away after being drawn</li>
+					<li>Canvas size increased to 640*480</li>
+					<li>Radius of circles is larger (4 units)</li>
+					<li>FPS increased to 60</li>
+					<li>The n value oscilates between 0 and 800, causing it to bounce outward and inward</li>
+				</ul>
+			</ul>
+		</div>
+	</div>
+</body>
+</html>
