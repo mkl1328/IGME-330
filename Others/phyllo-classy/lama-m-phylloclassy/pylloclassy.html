@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>PhylloClassy</title>
+	<link rel="stylesheet" href="./styles/default-style.css">
+	<script src="./src/main.js" type="module"></script>
+</head>
+<body>
+	<div id="container">
+		<canvas id="canvas"></canvas>
+		<div id="inputs">
+			<button id="restart">Restart</button>
+			<div>
+				<input type="checkbox" name="ramp" id="ramp" checked="true">
+				<label for="ramp">Ramp</label>
+			</div>
+		</div>
+		<div id="text">
+			<h1>About this program</h1>
+			<ul>
+				<li>The ramp button determines if the divergence angle will ramp up by 0.05 as it progresses</li>
+				<li>The restart button clears the screen, sets n to 0, and resets divergence value to 137.5</li>
+				<li>Changes made to starter code:</li>
+				<ul>
+					<li>Dots fade away after being drawn</li>
+					<li>Canvas size increased to 640*480</li>
+					<li>Radius of circles is larger (4 units)</li>
+					<li>FPS increased to 60</li>
+					<li>The n value oscilates between 0 and 800, causing it to bounce outward and inward</li>
+				</ul>
+			</ul>
+		</div>
+	</div>
+</body>
+</html>
