@@ -20,12 +20,14 @@ const drawParams = {
   showEmboss    : false,
 };
 
+let highshelf = false;
+
 // 1 - here we are faking an enumeration
 const DEFAULTS = Object.freeze({
 	sound1  :  "media/New Adventure Theme.mp3"
 });
 
-const init = () => {
+function init(){
   audio.setupWebaudio(DEFAULTS.sound1);
 	console.log("init called");
 	console.log(`Testing utils.getRandomColor() import: ${utils.getRandomColor()}`);
@@ -35,25 +37,41 @@ const init = () => {
   loop();
 }
 
-const setupUI = (canvasElement) => {
+function setupUI(canvasElement){
   // Checkboxes
-  document.querySelector("#cb-gradient").onchange = () => { drawParams.showGradient = document.querySelector("#cb-gradient").checked;}
-  document.querySelector("#cb-bars").onchange = () => { drawParams.showBars = document.querySelector("#cb-bars").checked;}
-  document.querySelector("#cb-circles").onchange = () => { drawParams.showCircles = document.querySelector("#cb-circles").checked;}
-  document.querySelector("#cb-noise").onchange = () => { drawParams.showNoise = document.querySelector("#cb-noise").checked;}
+  document.querySelector("#gradientCB").onchange = () => { drawParams.showGradient = document.querySelector("#gradientCB").checked;}
+  document.querySelector("#barsCB").onchange = () => { drawParams.showBars = document.querySelector("#barsCB").checked;}
+  document.querySelector("#circlesCB").onchange = () => { drawParams.showCircles = document.querySelector("#circlesCB").checked;}
+  document.querySelector("#noiseCB").onchange = () => { drawParams.showNoise = document.querySelector("#noiseCB").checked;}
 
-  document.querySelector("#cb-invert").onchange = () => { drawParams.showInvert = document.querySelector("#cb-invert").checked;}
-  document.querySelector("#cb-emboss").onchange = () => { drawParams.showEmboss = document.querySelector("#cb-emboss").checked;}
+  document.querySelector("#invertCB").onchange = () => { drawParams.showInvert = document.querySelector("#invertCB").checked;}
+  document.querySelector("#embossCB").onchange = () => { drawParams.showEmboss = document.querySelector("#embossCB").checked;}
+
+  document.querySelector('#cb-highshelf').checked = highshelf;
+  document.querySelector('#cb-highshelf').onchange = e => {
+    highshelf = e.target.checked;
+    toggleHighshelf();
+  };
+  toggleHighshelf();
 
   // A - hookup fullscreen button
-  const fsButton = document.querySelector("#btn-fs");
-  const playButton = document.querySelector("#btn-play");
+  const fsButton = document.querySelector("#fsButton");
+  const playButton = document.querySelector("#playButton");
 	
   // add .onclick event to button
   fsButton.onclick = e => {
     console.log("init called");
     utils.goFullscreen(canvasElement);
   };
+
+  function toggleHighshelf(){
+    if(highshelf){
+      audio.biquadFilter.frequency.setValueAtTime(1000, audioCtx.currentTime); // we created the `biquadFilter` (i.e. "treble") node last time
+      audio.biquadFilter.gain.setValueAtTime(25, audioCtx.currentTime);
+    }else{
+      audio.biquadFilter.gain.setValueAtTime(0, audioCtx.currentTime);
+    }
+  }
 
   // add .onclick event to button
   playButton.onclick = e => {
@@ -76,8 +94,8 @@ const setupUI = (canvasElement) => {
   }
 
   // C - hookup volume slider & label
-  let volumeSlider = document.querySelector("#volume-slider");
-  let volumeLabel = document.querySelector("#volume-label");
+  let volumeSlider = document.querySelector("#volumeSlider");
+  let volumeLabel = document.querySelector("#volumeLabel");
 
   // add .oninput event to slider
   volumeSlider.oninput = e => {
@@ -91,7 +109,7 @@ const setupUI = (canvasElement) => {
   volumeSlider.dispatchEvent(new Event("input"));
 
   // D - hookup track <select>
-  let trackSelect = document.querySelector("#track-select");
+  let trackSelect = document.querySelector("#trackSelect");
   // add .onchange event to <select>
   trackSelect.onchange = e => {
     audio.loadSoundFile(e.target.value);
@@ -103,9 +121,9 @@ const setupUI = (canvasElement) => {
 	
 } // end setupUI
 
-const loop = () => {
+function loop(){
  
-    setTimeout(1000/60);
+    requestAnimationFrame(loop);
     canvas.draw(drawParams);
   }
 

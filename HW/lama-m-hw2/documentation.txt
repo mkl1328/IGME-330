@@ -1,0 +1,11 @@
+I added a Bass Node and a Trebel Node in keeping with the tutorials provided.
+
+The sprite class I made is called __________
+ - desc: 
+
+No data in av-data.json yet
+
+I improved the aesthetics by changing the gradient to something a bit more appealing. 
+3% / 15% 
+
+I did not have time to implement more creative or appealing visuals.
