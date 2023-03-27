@@ -20,8 +20,6 @@ const drawParams = {
   showEmboss    : false,
 };
 
-let highshelf = false;
-
 // 1 - here we are faking an enumeration
 const DEFAULTS = Object.freeze({
 	sound1  :  "media/New Adventure Theme.mp3"
@@ -47,13 +45,6 @@ function setupUI(canvasElement){
   document.querySelector("#invertCB").onchange = () => { drawParams.showInvert = document.querySelector("#invertCB").checked;}
   document.querySelector("#embossCB").onchange = () => { drawParams.showEmboss = document.querySelector("#embossCB").checked;}
 
-  document.querySelector('#cb-highshelf').checked = highshelf;
-  document.querySelector('#cb-highshelf').onchange = e => {
-    highshelf = e.target.checked;
-    toggleHighshelf();
-  };
-  toggleHighshelf();
-
   // A - hookup fullscreen button
   const fsButton = document.querySelector("#fsButton");
   const playButton = document.querySelector("#playButton");
@@ -63,15 +54,6 @@ function setupUI(canvasElement){
     console.log("init called");
     utils.goFullscreen(canvasElement);
   };
-
-  function toggleHighshelf(){
-    if(highshelf){
-      audio.biquadFilter.frequency.setValueAtTime(1000, audioCtx.currentTime); // we created the `biquadFilter` (i.e. "treble") node last time
-      audio.biquadFilter.gain.setValueAtTime(25, audioCtx.currentTime);
-    }else{
-      audio.biquadFilter.gain.setValueAtTime(0, audioCtx.currentTime);
-    }
-  }
 
   // add .onclick event to button
   playButton.onclick = e => {
