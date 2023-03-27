@@ -1,0 +1,1 @@
+(()=>{"use strict";var e=Object.freeze({gain:.5,numSamples:256});new Uint8Array(e.numSamples/2),Object.freeze({sound1:"media/New Adventure Theme.mp3"})})();
