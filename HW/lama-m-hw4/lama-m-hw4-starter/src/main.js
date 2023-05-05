@@ -1,5 +1,6 @@
 import * as map from "./map.js";
 import * as ajax from "./ajax.js";
+import * as component from "./components.js";
 
 // I. Variables & constants
 // NB - it's easy to get [longitude,latitude] coordinates with this tool: http://geojson.io/
@@ -103,7 +104,25 @@ const createFavoriteElement = (id) => {
 	return a;
 };
 
+const createHeader = (title, subtitle) => {
+  let newHeader = document.createElement("my-header");
+  newHeader.dataset.title = title;
+  newHeader.dataset.subtitle = subtitle;
+
+  document.body.prepend(newHeader);
+}
+
+const createFooter = (text) => {
+  let newFooter = document.createElement("my-footer");
+  newFooter.dataset.footerText = text;
+
+  document.body.append(newFooter);
+}
+
 const init = () => {
+	createHeader("HW-4 - NY State Park Buddy!", "Your one-stop resource for NYS parks!");
+	createFooter("&copy; 2023 Max Lama");
+
 	map.initMap(lnglatNYS);
 	ajax.downloadFile("data/parks.geojson", (str) => {
 		geojson = JSON.parse(str);
