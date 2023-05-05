@@ -85,7 +85,6 @@ const init = () => {
 		map.addMarkersToMap(geojson, showFeatureDetails);
 		setupUI();
 	});
-	setupUI();
 };
 
 init();
